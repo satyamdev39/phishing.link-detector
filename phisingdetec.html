@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Phishing URL Detector</title>
+    <style>
+        body {
+            background: #f7f7f7;
+            font-family: Arial;
+            padding: 40px;
+        }
+        .box {
+            width: 450px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: 1px solid #aaa;
+            border-radius: 8px;
+        }
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            font-size: 17px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #005dcc;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>🔍 Phishing URL Detector</h2>
+
+    <input type="text" id="urlInput" placeholder="Paste your URL here">
+    <button onclick="checkURL()">Check URL</button>
+
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+function checkURL() {
+    const url = document.getElementById("urlInput").value.toLowerCase();
+    const resultBox = document.getElementById("result");
+
+    const suspiciousPatterns = [
+        /\d+\.\d+\.\d+\.\d+/,               // IP in URL
+        /login|verify|update|secure/,       // suspicious words
+        /bonus|free|gift/,                  // free scams
+        /-secure|-verify|-update/,          // fake security
+        /@/,                                // @ in URL
+    ];
+
+    let suspicious = false;
+
+    // too many hyphens
+    if (url.split("-").length - 1 >= 3) suspicious = true;
+
+    // too long
+    if (url.length > 120) suspicious = true;
+
+    // pattern matches
+    suspiciousPatterns.forEach(p => {
+        if (p.test(url)) suspicious = true;
+    });
+
+    if (suspicious) {
+        resultBox.style.color = "red";
+        resultBox.textContent = "⚠️ Suspicious / Phishing URL Detected!";
+    } else {
+        resultBox.style.color = "green";
+        resultBox.textContent = "✔️ This URL looks safe (still be careful).";
+    }
+}
+</script>
+
+</body>
+</html>
